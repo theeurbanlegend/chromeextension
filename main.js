@@ -3,31 +3,43 @@ let myLeads=[];
 const InputEl=document.getElementById("input-el")
 const InputBtn=document.getElementById("input-btn")
 const unorderedList=document.getElementById("unordered")
-
-
+const leadsFromStorage=JSON.parse(localStorage.getItem("myLeads"))
+const deleteBtn=document.getElementById("delete-all")
+const tabBtn=document.getElementById("save-tab")
+ 
 InputBtn.addEventListener("click", () => {   
     myLeads.push(InputEl.value)
     InputEl.value=""
     localStorage.setItem("myLeads", JSON.stringify(myLeads) )
-    displayLeads()
-
-    
+    display(myLeads)
     })
-let leadsFromStorage=JSON.parse(localStorage.getItem("myLeads"))
+
+tabBtn.addEventListener("click", ()=>{
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        myLeads.push(tabs[0].url)
+        localStorage.setItem("myLeads", JSON.stringify(myLeads) ) 
+        display(myLeads)
+    })
+})
+
 if (leadsFromStorage){
    myLeads=leadsFromStorage
-   displayLeads()
+   display(myLeads)
+   
 }
-console.log(leadsFromStorage)
-function displayLeads(){
-    
+function display(leads){
     let listItems=""
-    for(let i=0; i< myLeads.length; i++){
+    for(let i=0; i< leads.length; i++){
         listItems+=
         `<li>
-            <a target='_blank' href='${myLeads[i]}'> ${myLeads[i]}
+            <a target='_blank' href='${leads[i]}'> ${leads[i]}
             </a>
         </li>`
      }
     unorderedList.innerHTML=listItems
 }
+deleteBtn.addEventListener("click", ()=>{
+  localStorage.clear()
+  myLeads=[]  
+  display(myLeads)
+})

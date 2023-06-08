@@ -12,6 +12,14 @@ button{
     padding:0.65rem;
     margin-top:2px;
 }
+#delete-all{
+    font-weight: bold;
+    padding:0.65rem;
+    margin-top:2px;
+    background-color:white;
+    color:#5f9341;
+    border:solid 1px green;
+}
 input {
     width:100%;
     padding-left: 10px;
